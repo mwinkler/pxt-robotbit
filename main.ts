@@ -68,8 +68,8 @@ namespace robotbit {
     }
 
     let initialized = false
-    let rgb_initialized = false
-    let rgb_buffer: Buffer = null;
+    let led_initialized = false
+    let led_buffer: Buffer = null
 
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
@@ -155,15 +155,16 @@ namespace robotbit {
         setPwm((index - 1) * 2 + 1, 0, 0);
     }
 
-    function rgbInit(): void {
-        rgb_initialized = true;
-        rgb_buffer = pins.createBuffer(4 * 3); // 4 pixels, 3 bytes each
+    function ledInit(): void {
+        led_initialized = true;
+        led_buffer = pins.createBuffer(4 * 3); // 4 pixels, 3 bytes each
         pins.digitalWritePin(RGB_PIN, 0);
     }
 
-    function rgbSetBuffer(pixel: number, red: number, green: number, blue: number, brightness: number = 255): void {
+    function ledSetBuffer(pixel: number, red: number, green: number, blue: number, brightness: number = 255): void {
         if (pixel < 0 || pixel >= 4)
             return;
+
         const offset = pixel * 3;
         
         if (brightness < 255) {
@@ -172,13 +173,13 @@ namespace robotbit {
             blue = (blue * brightness) >> 8;
         }
         
-        rgb_buffer[offset + 0] = green;
-        rgb_buffer[offset + 1] = red;
-        rgb_buffer[offset + 2] = blue;
+        led_buffer[offset + 0] = green;
+        led_buffer[offset + 1] = red;
+        led_buffer[offset + 2] = blue;
     }
 
-    function rgbShowBuffer(): void {
-        ws2812b.sendBuffer(rgb_buffer, RGB_PIN);
+    function ledShowBuffer(): void {
+        ws2812b.sendBuffer(led_buffer, RGB_PIN);
     }
 
     function rgbUnpackR(rgb: number): number {
@@ -208,14 +209,14 @@ namespace robotbit {
      * @param show whether to write the buffer to the LEDs immediately
      */
     export function LedSetColorAll(color: number, brightness: number = 255, show: boolean = true): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
         for (let i = 0; i < 4; i++) {
-            rgbSetBuffer(i, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color), brightness);
+            ledSetBuffer(i, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color), brightness);
         }
         if (show) {
-            rgbShowBuffer();
+            ledShowBuffer();
         }
     }
 
@@ -236,14 +237,14 @@ namespace robotbit {
      * @param show whether to write the buffer to the LEDs immediately
      */
     export function LedSetColorAllRGB(red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
         for (let i = 0; i < 4; i++) {
-            rgbSetBuffer(i, red, green, blue, brightness);
+            ledSetBuffer(i, red, green, blue, brightness);
         }
         if (show) {
-            rgbShowBuffer();
+            ledShowBuffer();
         }
     }
 
@@ -261,12 +262,12 @@ namespace robotbit {
      * @param show whether to write the buffer to the LEDs immediately
      */
     export function LedSetColor(index: number, color: number, brightness: number = 255, show: boolean = true): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
-        rgbSetBuffer(index, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color), brightness);
+        ledSetBuffer(index, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color), brightness);
         if (show) {
-            rgbShowBuffer();
+            ledShowBuffer();
         }
     }
 
@@ -289,12 +290,12 @@ namespace robotbit {
      * @param show whether to write the buffer to the LEDs immediately
      */
     export function LedSetColorRGB(index: number, red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
-        rgbSetBuffer(index, red, green, blue, brightness);
+        ledSetBuffer(index, red, green, blue, brightness);
         if (show) {
-            rgbShowBuffer();
+            ledShowBuffer();
         }
     }
 
@@ -306,14 +307,14 @@ namespace robotbit {
      * @param show whether to write the buffer to the LEDs immediately
      */
     export function LedClear(show: boolean = true): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
         for (let i = 0; i < 4; i++) {
-            rgbSetBuffer(i, 0, 0, 0);
+            ledSetBuffer(i, 0, 0, 0);
         }
         if (show) {
-            rgbShowBuffer();
+            ledShowBuffer();
         }
     }
 
@@ -323,10 +324,10 @@ namespace robotbit {
      * Flush the LED buffer to the LEDs.
      */
     export function LedShow(): void {
-        if (!rgb_initialized) {
-            rgbInit();
+        if (!led_initialized) {
+            ledInit();
         }
-        rgbShowBuffer();
+        ledShowBuffer();
     }
 
     /**
@@ -375,7 +376,6 @@ namespace robotbit {
     */
     //% blockId=robotbit_gservo2kg block="GeekServo2KG|%index|degree %degree"
     //% group="Servo" weight=60
-    //% blockGap=50
     //% degree.min=0 degree.max=360
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
     //% advanced=true
@@ -523,7 +523,6 @@ namespace robotbit {
     */
     //% blockId=robotbit_stpcar_turn block="Car Turn|Degree %turn|Wheel Diameter(mm) %diameter|Track(mm) %track"
     //% group="Motor" weight=50
-    //% blockGap=50
     //% advanced=true
     export function StpCarTurn(turn: number, diameter: number, track: number): void {
         if (!initialized) {
@@ -606,7 +605,6 @@ namespace robotbit {
 
     //% blockId=robotbit_stop_all block="Motor Stop All"
     //% group="Motor" weight=55
-    //% blockGap=50
     /**
      * Stop all motor channels.
      */
