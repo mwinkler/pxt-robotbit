@@ -18,13 +18,10 @@ namespace robotbit {
 
     const STP_CHA_L = 2047
     const STP_CHA_H = 4095
-
     const STP_CHB_L = 1
     const STP_CHB_H = 2047
-
     const STP_CHC_L = 1023
     const STP_CHC_H = 3071
-
     const STP_CHD_L = 3071
     const STP_CHD_H = 1023
 
@@ -81,12 +78,6 @@ namespace robotbit {
         pins.i2cWriteBuffer(addr, buf)
     }
 
-    function i2ccmd(addr: number, value: number) {
-        let buf = pins.createBuffer(1)
-        buf[0] = value
-        pins.i2cWriteBuffer(addr, buf)
-    }
-
     function i2cread(addr: number, reg: number) {
         pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
         let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
@@ -121,9 +112,6 @@ namespace robotbit {
     function setPwm(channel: number, on: number, off: number): void {
         if (channel < 0 || channel > 15)
             return;
-        //serial.writeValue("ch", channel)
-        //serial.writeValue("on", on)
-        //serial.writeValue("off", off)
 
         let buf = pins.createBuffer(5);
         buf[0] = LED0_ON_L + 4 * channel;
@@ -228,6 +216,32 @@ namespace robotbit {
         }
     }
 
+    //% blockId=robotbit_rgb_set_all_rgb block="RGB set all to R %red G %green B %blue||show %show" group="RGB" weight=74
+    //% red.min=0 red.max=255 red.defl=255
+    //% green.min=0 green.max=255 green.defl=255
+    //% blue.min=0 blue.max=255 blue.defl=255
+    //% show.defl=true
+    //% expandableArgumentMode="toggle"
+    //% advanced=true
+    /**
+     * Set all four RGB pixels using separate red, green, blue values.
+     * @param red red intensity 0-255
+     * @param green green intensity 0-255
+     * @param blue blue intensity 0-255
+     * @param show whether to write the buffer to the LEDs immediately
+     */
+    export function RgbSetColorAllRGB(red: number, green: number, blue: number, show: boolean = true): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        for (let i = 0; i < 4; i++) {
+            rgbSetBuffer(i, red, green, blue);
+        }
+        if (show) {
+            rgbShowBuffer();
+        }
+    }
+
     //% blockId=robotbit_rgb_set_one block="RGB set pixel %index to %color||show %show" group="RGB" weight=74
     //% color.shadow="colorNumberPicker"
     //% show.defl=true
@@ -244,6 +258,32 @@ namespace robotbit {
             rgbInit();
         }
         rgbSetBuffer(index, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color));
+        if (show) {
+            rgbShowBuffer();
+        }
+    }
+
+    //% blockId=robotbit_rgb_set_one_rgb block="RGB set pixel %index to R %red G %green B %blue||show %show" group="RGB" weight=73
+    //% index.min=0 index.max=3
+    //% red.min=0 red.max=255 red.defl=255
+    //% green.min=0 green.max=255 green.defl=255
+    //% blue.min=0 blue.max=255 blue.defl=255
+    //% show.defl=true
+    //% expandableArgumentMode="toggle"
+    //% advanced=true
+    /**
+     * Set a single RGB pixel using separate red, green, blue values.
+     * @param index pixel index from 0 to 3
+     * @param red red intensity 0-255
+     * @param green green intensity 0-255
+     * @param blue blue intensity 0-255
+     * @param show whether to write the buffer to the LEDs immediately
+     */
+    export function RgbSetColorRGB(index: number, red: number, green: number, blue: number, show: boolean = true): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        rgbSetBuffer(index, red, green, blue);
         if (show) {
             rgbShowBuffer();
         }
