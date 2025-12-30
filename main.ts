@@ -196,18 +196,18 @@ namespace robotbit {
         return b;
     }
 
-    //% blockId=robotbit_rgb_set_all block="RGB set all to %color||brightness %brightness|show %show" group="RGB" weight=75
+    //% blockId=robotbit_led_set_all block="LED set all to %color||brightness %brightness|show %show" group="LED" weight=75
     //% color.shadow="colorNumberPicker"
     //% brightness.min=0 brightness.max=255 brightness.defl=255
     //% show.defl=true
     //% expandableArgumentMode="toggle"
     /**
-     * Set all four RGB pixels to the same color.
+     * Set all four LEDs to the same color.
      * @param color color value in 0xRRGGBB
      * @param brightness overall brightness 0-255
      * @param show whether to write the buffer to the LEDs immediately
      */
-    export function RgbSetColorAll(color: number, brightness: number = 255, show: boolean = true): void {
+    export function LedSetColorAll(color: number, brightness: number = 255, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
         }
@@ -219,7 +219,7 @@ namespace robotbit {
         }
     }
 
-    //% blockId=robotbit_rgb_set_all_rgb block="RGB set all to R %red G %green B %blue||brightness %brightness|show %show" group="RGB" weight=74
+    //% blockId=robotbit_led_set_all_rgb block="LED set all to R %red G %green B %blue||brightness %brightness|show %show" group="LED" weight=74
     //% red.min=0 red.max=255 red.defl=255
     //% green.min=0 green.max=255 green.defl=255
     //% blue.min=0 blue.max=255 blue.defl=255
@@ -228,14 +228,14 @@ namespace robotbit {
     //% expandableArgumentMode="toggle"
     //% advanced=true
     /**
-     * Set all four RGB pixels using separate red, green, blue values.
+     * Set all four LEDs using separate red, green, blue values.
      * @param red red intensity 0-255
      * @param green green intensity 0-255
      * @param blue blue intensity 0-255
      * @param brightness overall brightness 0-255
      * @param show whether to write the buffer to the LEDs immediately
      */
-    export function RgbSetColorAllRGB(red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
+    export function LedSetColorAllRGB(red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
         }
@@ -247,20 +247,20 @@ namespace robotbit {
         }
     }
 
-    //% blockId=robotbit_rgb_set_one block="RGB set pixel %index to %color||brightness %brightness|show %show" group="RGB" weight=74
+    //% blockId=robotbit_led_set_one block="LED set pixel %index to %color||brightness %brightness|show %show" group="LED" weight=73
     //% color.shadow="colorNumberPicker"
     //% brightness.min=0 brightness.max=255 brightness.defl=255
     //% show.defl=true
     //% expandableArgumentMode="toggle"
     //% index.min=0 index.max=3
     /**
-     * Set a single RGB pixel to a specific color.
+     * Set a single LED pixel to a specific color.
      * @param index pixel index from 0 to 3
      * @param color color value in 0xRRGGBB
      * @param brightness overall brightness 0-255
      * @param show whether to write the buffer to the LEDs immediately
      */
-    export function RgbSetColor(index: number, color: number, brightness: number = 255, show: boolean = true): void {
+    export function LedSetColor(index: number, color: number, brightness: number = 255, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
         }
@@ -270,7 +270,7 @@ namespace robotbit {
         }
     }
 
-    //% blockId=robotbit_rgb_set_one_rgb block="RGB set pixel %index to R %red G %green B %blue||brightness %brightness|show %show" group="RGB" weight=73
+    //% blockId=robotbit_led_set_one_rgb block="LED set pixel %index to R %red G %green B %blue||brightness %brightness|show %show" group="LED" weight=72
     //% index.min=0 index.max=3
     //% red.min=0 red.max=255 red.defl=255
     //% green.min=0 green.max=255 green.defl=255
@@ -280,7 +280,7 @@ namespace robotbit {
     //% expandableArgumentMode="toggle"
     //% advanced=true
     /**
-     * Set a single RGB pixel using separate red, green, blue values.
+     * Set a single LED pixel using separate red, green, blue values.
      * @param index pixel index from 0 to 3
      * @param red red intensity 0-255
      * @param green green intensity 0-255
@@ -288,7 +288,7 @@ namespace robotbit {
      * @param brightness overall brightness 0-255
      * @param show whether to write the buffer to the LEDs immediately
      */
-    export function RgbSetColorRGB(index: number, red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
+    export function LedSetColorRGB(index: number, red: number, green: number, blue: number, brightness: number = 255, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
         }
@@ -298,14 +298,14 @@ namespace robotbit {
         }
     }
 
-    //% blockId=robotbit_rgb_clear block="RGB clear||show %show" group="RGB" weight=73
+    //% blockId=robotbit_led_clear block="LED clear||show %show" group="LED" weight=71
     //% show.defl=true
     //% expandableArgumentMode="toggle"
     /**
-     * Clear all RGB pixels to off.
+     * Clear all LED pixels to off.
      * @param show whether to write the buffer to the LEDs immediately
      */
-    export function RgbClear(show: boolean = true): void {
+    export function LedClear(show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
         }
@@ -317,12 +317,12 @@ namespace robotbit {
         }
     }
 
-    //% blockId=robotbit_rgb_show block="RGB show" group="RGB" weight=72
+    //% blockId=robotbit_led_show block="LED show" group="LED" weight=70
     //% advanced=true
     /**
-     * Flush the RGB buffer to the LEDs.
+     * Flush the LED buffer to the LEDs.
      */
-    export function RgbShow(): void {
+    export function LedShow(): void {
         if (!rgb_initialized) {
             rgbInit();
         }
