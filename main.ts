@@ -28,6 +28,8 @@ namespace robotbit {
     const STP_CHD_L = 3071
     const STP_CHD_H = 1023
 
+    const RGB_PIN = DigitalPin.P16
+
     export enum Servos {
         S1 = 0x01,
         S2 = 0x02,
@@ -51,11 +53,6 @@ namespace robotbit {
         M2 = 0x2
     }
 
-    export enum SonarVersion {
-        V1 = 0x1,
-        V2 = 0x2
-    }
-
     export enum Turns {
         //% blockId="T1B4" block="1/4"
         T1B4 = 90,
@@ -73,15 +70,9 @@ namespace robotbit {
         T5B0 = 1800
     }
 
-	export enum ValueUnit {
-        //% block="mm"
-        Millimeter,
-        //% block="cm"
-        Centimeters
-    }
-
     let initialized = false
-    let neoStrip: neopixel.Strip;
+    let rgb_initialized = false
+    let rgb_buffer: Buffer = null;
 
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
@@ -143,7 +134,6 @@ namespace robotbit {
         pins.i2cWriteBuffer(PCA9685_ADDRESS, buf);
     }
 
-
     function setStepper(index: number, dir: boolean): void {
         if (index == 1) {
             if (dir) {
@@ -177,17 +167,85 @@ namespace robotbit {
         setPwm((index - 1) * 2 + 1, 0, 0);
     }
 
-    /**
-     * Init RGB pixels mounted on robotbit
-     */
-    //% blockId="robotbit_rgb" block="RGB"
-    //% weight=70
-    export function rgb(): neopixel.Strip {
-        if (!neoStrip) {
-            neoStrip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
-        }
+    function rgbInit(): void {
+        rgb_initialized = true;
+        rgb_buffer = pins.createBuffer(4 * 3); // 4 pixels, 3 bytes each
+        pins.digitalWritePin(RGB_PIN, 0);
+    }
 
-        return neoStrip;
+    function rgbSetBuffer(pixel: number, red: number, green: number, blue: number): void {
+        if (pixel < 0 || pixel >= 4)
+            return;
+        const offset = pixel * 3;
+        // let br = this.brightness;
+        //     if (br < 255) {
+        //         red = (red * br) >> 8;
+        //         green = (green * br) >> 8;
+        //         blue = (blue * br) >> 8;
+        //     }
+        rgb_buffer[offset + 0] = green;
+        rgb_buffer[offset + 1] = red;
+        rgb_buffer[offset + 2] = blue;
+    }
+
+    function rgbShowBuffer(): void {
+        ws2812b.sendBuffer(rgb_buffer, RGB_PIN);
+    }
+
+    function rgbUnpackR(rgb: number): number {
+        let r = (rgb >> 16) & 0xFF;
+        return r;
+    }
+
+    function rgbUnpackG(rgb: number): number {
+        let g = (rgb >> 8) & 0xFF;
+        return g;
+    }
+
+    function rgbUnpackB(rgb: number): number {
+        let b = (rgb) & 0xFF;
+        return b;
+    }
+
+    export function RgbSetColorAll(color: number, show: boolean = true): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        for (let i = 0; i < 4; i++) {
+            rgbSetBuffer(i, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color));
+        }
+        if (show) {
+            rgbShowBuffer();
+        }
+    }
+
+    export function RgbSetColor(index: number, color: number, show: boolean = true): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        rgbSetBuffer(index, rgbUnpackR(color), rgbUnpackG(color), rgbUnpackB(color));
+        if (show) {
+            rgbShowBuffer();
+        }
+    }
+
+    export function RgbClear(show: boolean = true): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        for (let i = 0; i < 4; i++) {
+            rgbSetBuffer(i, 0, 0, 0);
+        }
+        if (show) {
+            rgbShowBuffer();
+        }
+    }
+
+    export function RgbShow(): void {
+        if (!rgb_initialized) {
+            rgbInit();
+        }
+        rgbShowBuffer();
     }
 
     /**
@@ -391,7 +449,6 @@ namespace robotbit {
             setPwm(pn, 0, -speed)
         }
     }
-
 
     /**
      * Execute two motors at the same time
