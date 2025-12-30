@@ -5,18 +5,10 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:kittenbot/pxt-neopixel",
-        "SensorPlus": "github:kittenbothk/pxt-moduleplus",
-        "microphone": "*"
+        "neopixel": "github:kittenbot/pxt-neopixel"
     },
     "files": [
-        "README.md",
-        "main.ts",
-        "_locales/zh-cn/robotbit-strings.json",
-        "_locales/zh-tw/robotbit-strings.json"
-    ],
-    "testFiles": [
-        "test.ts"
+        "README.md"
     ],
     "public": true,
     "targetVersions": {
