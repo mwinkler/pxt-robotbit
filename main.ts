@@ -269,6 +269,7 @@ namespace robotbit {
     }
 
     //% blockId=robotbit_rgb_show block="RGB show" group="RGB" weight=72
+    //% advanced=true
     /**
      * Flush the RGB buffer to the LEDs.
      */
@@ -307,6 +308,7 @@ namespace robotbit {
     ///% group="Servo" weight=61
     //% degree.min=-45 degree.max=225
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    //% advanced=true
     export function GeekServo(index: Servos, degree: number): void {
         if (!initialized) {
             initPCA9685()
@@ -327,6 +329,7 @@ namespace robotbit {
     //% blockGap=50
     //% degree.min=0 degree.max=360
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    //% advanced=true
     export function GeekServo2KG(index: Servos, degree: number): void {
         if (!initialized) {
             initPCA9685()
@@ -347,6 +350,7 @@ namespace robotbit {
     //% group="Servo" weight=59
     //% degree.min=0 degree.max=360
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    //% advanced=true
     /**
      * Control a GeekServo5KG from 0 to 360 degrees.
      * @param index servo channel
@@ -370,6 +374,7 @@ namespace robotbit {
     //% group="Servo" weight=58
     //% speed.min=-255 speed.max=255
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    //% advanced=true
     /**
      * Drive a GeekServo5KG motor channel at a speed from -255 to 255.
      * @param index servo channel
@@ -384,6 +389,7 @@ namespace robotbit {
     
     //% blockId=robotbit_stepper_degree block="Stepper 28BYJ-48|%index|degree %degree"
     //% group="Motor" weight=54
+    //% advanced=true
     /**
      * Turn one stepper by degrees.
      * @param index stepper motor index
@@ -401,6 +407,7 @@ namespace robotbit {
 
     //% blockId=robotbit_stepper_turn block="Stepper 28BYJ-48|%index|turn %turn"
     //% group="Motor" weight=53
+    //% advanced=true
     /**
      * Turn one stepper by preset turns.
      * @param index stepper motor index
@@ -413,6 +420,7 @@ namespace robotbit {
 
     //% blockId=robotbit_stepper_dual block="Dual Stepper(Degree) |M1 %degree1| M2 %degree2"
     //% group="Motor" weight=52
+    //% advanced=true
     /**
      * Turn both steppers by degrees at once.
      * @param degree1 degrees for stepper M1
@@ -445,6 +453,7 @@ namespace robotbit {
     */
     //% blockId=robotbit_stpcar_move block="Car Forward|Distance(cm) %distance|Wheel Diameter(mm) %diameter"
     //% group="Motor" weight=51
+    //% advanced=true
     export function StpCarMove(distance: number, diameter: number): void {
         if (!initialized) {
             initPCA9685()
@@ -466,6 +475,7 @@ namespace robotbit {
     //% blockId=robotbit_stpcar_turn block="Car Turn|Degree %turn|Wheel Diameter(mm) %diameter|Track(mm) %track"
     //% group="Motor" weight=50
     //% blockGap=50
+    //% advanced=true
     export function StpCarTurn(turn: number, diameter: number, track: number): void {
         if (!initialized) {
             initPCA9685()
