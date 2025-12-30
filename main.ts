@@ -207,6 +207,15 @@ namespace robotbit {
         return b;
     }
 
+    //% blockId=robotbit_rgb_set_all block="RGB set all to %color||show %show" group="RGB" weight=75
+    //% color.shadow="colorNumberPicker"
+    //% show.defl=true
+    //% expandableArgumentMode="toggle"
+    /**
+     * Set all four RGB pixels to the same color.
+     * @param color color value in 0xRRGGBB
+     * @param show whether to write the buffer to the LEDs immediately
+     */
     export function RgbSetColorAll(color: number, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
@@ -219,6 +228,17 @@ namespace robotbit {
         }
     }
 
+    //% blockId=robotbit_rgb_set_one block="RGB set pixel %index to %color||show %show" group="RGB" weight=74
+    //% color.shadow="colorNumberPicker"
+    //% show.defl=true
+    //% expandableArgumentMode="toggle"
+    //% index.min=0 index.max=3
+    /**
+     * Set a single RGB pixel to a specific color.
+     * @param index pixel index from 0 to 3
+     * @param color color value in 0xRRGGBB
+     * @param show whether to write the buffer to the LEDs immediately
+     */
     export function RgbSetColor(index: number, color: number, show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
@@ -229,6 +249,13 @@ namespace robotbit {
         }
     }
 
+    //% blockId=robotbit_rgb_clear block="RGB clear||show %show" group="RGB" weight=73
+    //% show.defl=true
+    //% expandableArgumentMode="toggle"
+    /**
+     * Clear all RGB pixels to off.
+     * @param show whether to write the buffer to the LEDs immediately
+     */
     export function RgbClear(show: boolean = true): void {
         if (!rgb_initialized) {
             rgbInit();
@@ -241,6 +268,10 @@ namespace robotbit {
         }
     }
 
+    //% blockId=robotbit_rgb_show block="RGB show" group="RGB" weight=72
+    /**
+     * Flush the RGB buffer to the LEDs.
+     */
     export function RgbShow(): void {
         if (!rgb_initialized) {
             rgbInit();
@@ -316,6 +347,11 @@ namespace robotbit {
     //% group="Servo" weight=59
     //% degree.min=0 degree.max=360
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    /**
+     * Control a GeekServo5KG from 0 to 360 degrees.
+     * @param index servo channel
+     * @param degree target angle between 0 and 360
+     */
     export function GeekServo5KG(index: Servos, degree: number): void {
         if (!initialized) {
             initPCA9685()
@@ -334,6 +370,11 @@ namespace robotbit {
     //% group="Servo" weight=58
     //% speed.min=-255 speed.max=255
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    /**
+     * Drive a GeekServo5KG motor channel at a speed from -255 to 255.
+     * @param index servo channel
+     * @param speed motor speed from -255 (full reverse) to 255 (full forward)
+     */
     export function GeekServo5KG_Motor(index: Servos, speed: number): void {
         if (!initialized) {
             initPCA9685();
@@ -343,6 +384,11 @@ namespace robotbit {
     
     //% blockId=robotbit_stepper_degree block="Stepper 28BYJ-48|%index|degree %degree"
     //% group="Motor" weight=54
+    /**
+     * Turn one stepper by degrees.
+     * @param index stepper motor index
+     * @param degree positive for forward, negative for reverse
+     */
     export function StepperDegree(index: Steppers, degree: number): void {
         if (!initialized) {
             initPCA9685()
@@ -355,6 +401,11 @@ namespace robotbit {
 
     //% blockId=robotbit_stepper_turn block="Stepper 28BYJ-48|%index|turn %turn"
     //% group="Motor" weight=53
+    /**
+     * Turn one stepper by preset turns.
+     * @param index stepper motor index
+     * @param turn preset turn selection
+     */
     export function StepperTurn(index: Steppers, turn: Turns): void {
         let degree = turn;
         StepperDegree(index, degree);
@@ -362,6 +413,11 @@ namespace robotbit {
 
     //% blockId=robotbit_stepper_dual block="Dual Stepper(Degree) |M1 %degree1| M2 %degree2"
     //% group="Motor" weight=52
+    /**
+     * Turn both steppers by degrees at once.
+     * @param degree1 degrees for stepper M1
+     * @param degree2 degrees for stepper M2
+     */
     export function StepperDual(degree1: number, degree2: number): void {
         if (!initialized) {
             initPCA9685()
@@ -426,6 +482,11 @@ namespace robotbit {
     //% group="Motor" weight=59
     //% speed.min=-255 speed.max=255
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    /**
+     * Run one motor channel at the given speed.
+     * @param index motor channel
+     * @param speed motor speed from -255 (reverse) to 255 (forward)
+     */
     export function MotorRun(index: Motors, speed: number): void {
         if (!initialized) {
             initPCA9685()
@@ -462,6 +523,13 @@ namespace robotbit {
     //% speed1.min=-255 speed1.max=255
     //% speed2.min=-255 speed2.max=255
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
+    /**
+     * Run two motor channels simultaneously with independent speeds.
+     * @param motor1 first motor channel
+     * @param speed1 speed for first motor (-255 to 255)
+     * @param motor2 second motor channel
+     * @param speed2 speed for second motor (-255 to 255)
+     */
     export function MotorRunDual(motor1: Motors, speed1: number, motor2: Motors, speed2: number): void {
         MotorRun(motor1, speed1);
         MotorRun(motor2, speed2);
@@ -469,6 +537,10 @@ namespace robotbit {
 
     //% blockId=robotbit_stop block="Motor Stop|%index|"
     //% group="Motor" weight=56
+    /**
+     * Stop a single motor channel.
+     * @param index motor channel to stop
+     */
     export function MotorStop(index: Motors): void {
         MotorRun(index, 0);
     }
@@ -476,6 +548,9 @@ namespace robotbit {
     //% blockId=robotbit_stop_all block="Motor Stop All"
     //% group="Motor" weight=55
     //% blockGap=50
+    /**
+     * Stop all motor channels.
+     */
     export function MotorStopAll(): void {
         if (!initialized) {
             initPCA9685()
